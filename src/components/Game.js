@@ -10,11 +10,18 @@ export default class Game extends Component {
     super(props);
 
     this.state = {
+      // all: PlayStore.getAll()
       deck: PlayStore.getDeck(),
       playerHand: PlayStore.getPlayerHand(),
-      dealerHand: PlayStore.getDealerHand()
+      dealerHand: PlayStore.getDealerHand(),
+      dealerScore: PlayStore.getDealerScore(),
+      playerScore: PlayStore.getPlayerScore(),
+      playing:  PlayStore.getPlaying()
     }
     this._onChange = this._onChange.bind(this);
+    this.newGame = this.newGame.bind(this);
+    this.endRound = this.endRound.bind(this);
+    this.hit = this.hit.bind(this);
     console.log('state:', this.state);
   }
 
@@ -30,45 +37,52 @@ export default class Game extends Component {
 
   _onChange() {
     this.setState({
+      // all: PlayStore.getAll()
       deck: PlayStore.getDeck(),
       playerHand: PlayStore.getPlayerHand(),
-      dealerHand: PlayStore.getDealerHand()
+      dealerHand: PlayStore.getDealerHand(),
+      dealerScore: PlayStore.getDealerScore(),
+      playerScore: PlayStore.getPlayerScore(),
+      playing:  PlayStore.getPlaying()
     })
     console.log('state:', this.state);
   }
 
+  newGame() {
+    PlayActions.newGame();
+    PlayActions.playing(true);
+    // this.setState({
+    //   playing: true
+    // })
+
+  }
+
   hit() {
     PlayActions.drawCard();
+    // if (this.state.playerScore === 'BUST!') {
+    //   this.endRound();
+    // } else {
+    //   PlayActions.drawCard();
+    // }
+  }
+
+  endRound() {
+    // this.setState({
+    //   playing: false
+    // })
+    PlayActions.playing(false);
   }
 
   render() {
-    const { playerHand, dealerHand } = this.state;
-
-    // const { held } = this.state.deck;
-    // console.log('state', this.state);
-    // console.log('held', held);
-    // // let hand = () => {
-    // //   for (var i in held) {
-    // //     return (
-    // //       <li>{held[i].value}</li>
-    // //     )
-    // //   }
-    // // }
-    // let hand;
-    //
-    // if (held) {
-    //   hand = held.map((card) => {
-    //     return (
-    //       <li>{card.value}</li>
-    //     )
-    //   })
-    // }
+    const { playerHand, dealerHand, playerScore, dealerScore, playing } = this.state;
 
     return (
       <div>
-        <DealerHand hand={dealerHand} />
-        <button className="btn btn-success" onClick={this.hit}>Hit</button>
-        <PlayerHand hand={playerHand} />
+        <button className="btn btn-primary" onClick={this.newGame}disabled={playing}>New Game</button>
+        <DealerHand hand={dealerHand} score={dealerScore} />
+        <PlayerHand hand={playerHand} score={playerScore} />
+        <button id="hitButton" className="btn btn-success" disabled={!playing} onClick={this.hit}>Hit</button>
+        <button id="stayButton" className="btn btn-default" disabled={!playing} onClick={this.endRound}>Stay</button>
       </div>
 
     )

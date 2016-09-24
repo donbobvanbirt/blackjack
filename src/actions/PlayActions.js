@@ -5,7 +5,6 @@ const PlayActions = {
     console.log('play button clicked!');
     AppDispatcher.dispatch({
       type: 'NEW_GAME',
-      // payload: true
     })
   },
 
@@ -13,7 +12,13 @@ const PlayActions = {
     // console.log('card drawn');
     AppDispatcher.dispatch({
       type: 'DRAW_CARD',
-      // payload: true
+    })
+  },
+
+  playing(val) {
+    AppDispatcher.dispatch({
+      type: 'PLAYING',
+      payload: { val }
     })
   }
 }

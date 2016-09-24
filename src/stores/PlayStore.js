@@ -67,6 +67,7 @@ let _dealerHand = [];
 let _playerHand = [];
 let _dealerScore = 0;
 let _playerScore = 0;
+let _playing = false;
 
 class PlayStore extends EventEmitter {
   constructor() {
@@ -94,6 +95,10 @@ class PlayStore extends EventEmitter {
         console.log('dealerScore:', _dealerScore, 'playerScore', _playerScore);
         this.emit('CHANGE');
         break;
+        case 'PLAYING':
+        _playing = action.payload.val;
+        this.emit('CHANGE');
+        break;
       }
     });
   }
@@ -101,14 +106,22 @@ class PlayStore extends EventEmitter {
   calculateScore() {
     var dealer = 0;
     var player = 0;
+
     _dealerHand.forEach(card => {
       dealer += card.value;
     })
+    if (dealer > 21) {
+      dealer = 'BUST!';
+    }
     _dealerScore = dealer;
 
     _playerHand.forEach(card => {
       player += card.value;
     })
+    if (player > 21) {
+      player = 'BUST!';
+      _playing = false;
+    }
     _playerScore = player;
   }
 
@@ -139,6 +152,21 @@ class PlayStore extends EventEmitter {
   getDealerScore() {
     return _dealerScore
   }
+
+  getPlaying() {
+    return _playing
+  }
+
+  // getAll() {
+  //   let all = {
+  //     deck: _deck,
+  //     dealerHand: _dealerHand,
+  //     playerHand: _playerHand,
+  //     dealerScore: _dealerScore,
+  //     playerScore: _playerScore
+  //   }
+  //   return all;
+  // }
 
 }
 

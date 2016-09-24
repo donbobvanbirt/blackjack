@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 const PlayerHand = props => {
-  const { hand } = props;
+  const { hand, score } = props;
   return (
     <div>
       <h4>Hand:</h4>
@@ -10,6 +10,7 @@ const PlayerHand = props => {
           <li key={i}>{card.name}</li>
         ))}
       </ul>
+      <h4>Score: {score}</h4>
     </div>
   )
 }
