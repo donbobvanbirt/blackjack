@@ -4,7 +4,7 @@ import lodash from 'lodash';
 import cards from 'cards';
 
 // let _deck = new cards.PokerDeck();
-let _deck = [
+let startingDeck = [
   {name: 'Ace of Spades', value: 11, image: 0},
   {name: 'Duece of Spades', value: 2, image: 0},
   {name: 'Three of Spades', value: 3, image: 0},
@@ -62,8 +62,11 @@ let _deck = [
   {name: 'King of Dimonds', value: 10, image: 0},
 ];
 
+let _deck = [];
 let _dealerHand = [];
 let _playerHand = [];
+let _dealerScore = 0;
+let _playerScore = 0;
 
 class PlayStore extends EventEmitter {
   constructor() {
@@ -72,22 +75,41 @@ class PlayStore extends EventEmitter {
     AppDispatcher.register(action => {
       switch(action.type) {
         case 'NEW_GAME':
-          // _deck.shuffleAll();
-          // console.log('deck before draw', _deck);
-          // _deck.draw(4);
-          // console.log('deck after draw', _deck);
-          _deck = lodash.shuffle(_deck);
-          this.emit('CHANGE');
-          break;
+        _deck = lodash.shuffle(startingDeck);
+        _dealerHand = [];
+        _playerHand = [];
+        _dealerHand.push(_deck.pop());
+        _dealerHand.push(_deck.pop());
+        _playerHand.push(_deck.pop());
+        _playerHand.push(_deck.pop());
+        this.calculateScore();
+        console.log('dealerScore:', _dealerScore, 'playerScore', _playerScore);
+        this.emit('CHANGE');
+        break;
         case 'DRAW_CARD':
-          // _deck.draw();
-          console.log('card drawn');
-          _playerHand.push(_deck[_deck.length-1]);
-          _deck.pop();
-          this.emit('CHANGE');
-          break;
+        // _deck.draw();
+        console.log('card drawn');
+        _playerHand.push(_deck.pop());
+        this.calculateScore();
+        console.log('dealerScore:', _dealerScore, 'playerScore', _playerScore);
+        this.emit('CHANGE');
+        break;
       }
     });
+  }
+
+  calculateScore() {
+    var dealer = 0;
+    var player = 0;
+    _dealerHand.forEach(card => {
+      dealer += card.value;
+    })
+    _dealerScore = dealer;
+
+    _playerHand.forEach(card => {
+      player += card.value;
+    })
+    _playerScore = player;
   }
 
   startListening(cb) {
@@ -109,6 +131,15 @@ class PlayStore extends EventEmitter {
   getDealerHand() {
     return _dealerHand;
   }
+
+  getPlayerScore() {
+    return _playerScore
+  }
+
+  getDealerScore() {
+    return _dealerScore
+  }
+
 }
 
 export default new PlayStore();

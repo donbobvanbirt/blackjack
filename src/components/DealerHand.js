@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-const PlayerHand = props => {
+const DealerHand = props => {
   const { hand } = props;
   return (
     <div>
-      <h4>Hand:</h4>
+      <h4>Dealer:</h4>
       <ul>
         {hand.map((card, i) => (
           <li key={i}>{card.name}</li>
@@ -14,4 +14,4 @@ const PlayerHand = props => {
   )
 }
 
-export default PlayerHand;
+export default DealerHand;

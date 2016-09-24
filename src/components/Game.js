@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PlayStore from '../stores/PlayStore';
 import PlayActions from '../actions/PlayActions';
 import PlayerHand from './PlayerHand';
+import DealerHand from './DealerHand';
 
 export default class Game extends Component {
   constructor(props) {
@@ -29,19 +30,19 @@ export default class Game extends Component {
 
   _onChange() {
     this.setState({
-      deck: PlayStore.getDeck()
+      deck: PlayStore.getDeck(),
+      playerHand: PlayStore.getPlayerHand(),
+      dealerHand: PlayStore.getDealerHand()
     })
     console.log('state:', this.state);
   }
 
   hit() {
-    // console.log('held', );
     PlayActions.drawCard();
-    // console.log("held", this.state.deck.held);
   }
 
   render() {
-    const { playerHand } = this.state;
+    const { playerHand, dealerHand } = this.state;
 
     // const { held } = this.state.deck;
     // console.log('state', this.state);
@@ -65,8 +66,9 @@ export default class Game extends Component {
 
     return (
       <div>
+        <DealerHand hand={dealerHand} />
         <button className="btn btn-success" onClick={this.hit}>Hit</button>
-        <PlayerHand hand={playerHand}/>
+        <PlayerHand hand={playerHand} />
       </div>
 
     )
