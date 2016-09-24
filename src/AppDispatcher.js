@@ -1,2 +1,2 @@
-import Flux from 'flux';  // import statement, works just like require
+import Flux from 'flux'; 
 export default new Flux.Dispatcher();
