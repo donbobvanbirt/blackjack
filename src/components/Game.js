@@ -4,6 +4,7 @@ import PlayStore from '../stores/PlayStore';
 import PlayActions from '../actions/PlayActions';
 import PlayerHand from './PlayerHand';
 import DealerHand from './DealerHand';
+import Winner from './Winner';
 
 export default class Game extends Component {
   constructor(props) {
@@ -22,7 +23,7 @@ export default class Game extends Component {
     this.newGame = this.newGame.bind(this);
     this.endRound = this.endRound.bind(this);
     this.hit = this.hit.bind(this);
-    console.log('state:', this.state);
+    // console.log('state:', this.state);
   }
 
   // start listening
@@ -43,9 +44,10 @@ export default class Game extends Component {
       dealerHand: PlayStore.getDealerHand(),
       dealerScore: PlayStore.getDealerScore(),
       playerScore: PlayStore.getPlayerScore(),
-      playing:  PlayStore.getPlaying()
+      playing:  PlayStore.getPlaying(),
+      winner: PlayStore.getWinner()
     })
-    console.log('state:', this.state);
+    // console.log('state:', this.state);
   }
 
   newGame() {
@@ -59,26 +61,28 @@ export default class Game extends Component {
 
   hit() {
     PlayActions.drawCard();
-    // if (this.state.playerScore === 'BUST!') {
-    //   this.endRound();
-    // } else {
-    //   PlayActions.drawCard();
-    // }
+  }
+
+  dealersTurn() {
+    while(PlayStore.getDealerScore() < 17) {
+      PlayActions.dealerHit();
+    }
+    PlayActions.calculateWinner();
+    // console.log('dealersTurn');
   }
 
   endRound() {
-    // this.setState({
-    //   playing: false
-    // })
     PlayActions.playing(false);
+    this.dealersTurn();
   }
 
   render() {
-    const { playerHand, dealerHand, playerScore, dealerScore, playing } = this.state;
+    const { playerHand, dealerHand, playerScore, dealerScore, playing, winner } = this.state;
 
     return (
       <div>
-        <button className="btn btn-primary" onClick={this.newGame}disabled={playing}>New Game</button>
+        <Winner winner={winner} />
+        <button className="btn btn-primary" onClick={this.newGame} disabled={playing}>New Game</button>
         <DealerHand hand={dealerHand} score={dealerScore} />
         <PlayerHand hand={playerHand} score={playerScore} />
         <button id="hitButton" className="btn btn-success" disabled={!playing} onClick={this.hit}>Hit</button>

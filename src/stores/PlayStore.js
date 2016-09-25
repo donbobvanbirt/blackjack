@@ -68,6 +68,7 @@ let _playerHand = [];
 let _dealerScore = 0;
 let _playerScore = 0;
 let _playing = false;
+let _winner = '';
 
 class PlayStore extends EventEmitter {
   constructor() {
@@ -76,28 +77,41 @@ class PlayStore extends EventEmitter {
     AppDispatcher.register(action => {
       switch(action.type) {
         case 'NEW_GAME':
-        _deck = lodash.shuffle(startingDeck);
-        _dealerHand = [];
-        _playerHand = [];
-        _dealerHand.push(_deck.pop());
-        _dealerHand.push(_deck.pop());
-        _playerHand.push(_deck.pop());
-        _playerHand.push(_deck.pop());
-        this.calculateScore();
-        console.log('dealerScore:', _dealerScore, 'playerScore', _playerScore);
-        this.emit('CHANGE');
+          _deck = lodash.shuffle(startingDeck);
+          _dealerHand = [];
+          _playerHand = [];
+          _winner = '';
+          _dealerHand.push(_deck.pop());
+          _dealerHand.push(_deck.pop());
+          _playerHand.push(_deck.pop());
+          _playerHand.push(_deck.pop());
+          this.calculateScore();
+          // console.log('dealerScore:', _dealerScore, 'playerScore', _playerScore);
+          this.emit('CHANGE');
         break;
         case 'DRAW_CARD':
-        // _deck.draw();
-        console.log('card drawn');
-        _playerHand.push(_deck.pop());
-        this.calculateScore();
-        console.log('dealerScore:', _dealerScore, 'playerScore', _playerScore);
-        this.emit('CHANGE');
+          console.log('card drawn');
+          _playerHand.push(_deck.pop());
+          this.calculateScore();
+          // console.log('dealerScore:', _dealerScore, 'playerScore', _playerScore);
+          this.emit('CHANGE');
         break;
         case 'PLAYING':
-        _playing = action.payload.val;
-        this.emit('CHANGE');
+          _playing = action.payload.val;
+          this.emit('CHANGE');
+        break;
+        case 'DEALER_HIT':
+          _dealerHand.push(_deck.pop());
+          this.calculateScore();
+          // console.log('the house is hitting');
+          this.emit('CHANGE');
+        break;
+        case 'CALCULATE_WINNER':
+
+          console.log('calculating winner');
+          this.calculateWinner();
+          console.log(_winner);
+          this.emit('CHANGE');
         break;
       }
     });
@@ -121,8 +135,19 @@ class PlayStore extends EventEmitter {
     if (player > 21) {
       player = 'BUST!';
       _playing = false;
+      _winner = "HOUSE WINS!";
     }
     _playerScore = player;
+  }
+
+  calculateWinner() {
+    if (_dealerScore > _playerScore) {
+      _winner = "HOUSE WINS!";
+    } else if (_dealerScore === _playerScore) {
+      _winner = "PUSH";
+    } else {
+      _winner = "YOU WON!!";
+    }
   }
 
   startListening(cb) {
@@ -155,6 +180,10 @@ class PlayStore extends EventEmitter {
 
   getPlaying() {
     return _playing
+  }
+
+  getWinner() {
+    return _winner
   }
 
   // getAll() {
