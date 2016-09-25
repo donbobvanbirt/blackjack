@@ -90,9 +90,9 @@ class PlayStore extends EventEmitter {
           this.emit('CHANGE');
         break;
         case 'DRAW_CARD':
-          console.log('card drawn');
+          // console.log('card drawn');
           _playerHand.push(_deck.pop());
-          this.calculateScore();
+          this.calculateScore(_playerScore);
           // console.log('dealerScore:', _dealerScore, 'playerScore', _playerScore);
           this.emit('CHANGE');
         break;
@@ -102,13 +102,13 @@ class PlayStore extends EventEmitter {
         break;
         case 'DEALER_HIT':
           _dealerHand.push(_deck.pop());
-          this.calculateScore();
+          this.calculateScore(_dealerScore);
           // console.log('the house is hitting');
           this.emit('CHANGE');
         break;
         case 'CALCULATE_WINNER':
 
-          console.log('calculating winner');
+          // console.log('calculating winner');
           this.calculateWinner();
           console.log(_winner);
           this.emit('CHANGE');
@@ -117,21 +117,38 @@ class PlayStore extends EventEmitter {
     });
   }
 
-  calculateScore() {
+  calculateScore(score) {
     var dealer = 0;
     var player = 0;
 
+    var aces = 0;
     _dealerHand.forEach(card => {
       dealer += card.value;
     })
+    //
+    // while (aces && dealer > 21) {
+    //   dealer -= 10;
+    //   aces--;
+    // }
+
     if (dealer > 21) {
       dealer = 'BUST!';
     }
     _dealerScore = dealer;
 
+
     _playerHand.forEach(card => {
       player += card.value;
+      if (card.value === 11) {
+        aces++;
+      }
     })
+
+    while (aces && player > 21) {
+      player -= 10;
+      aces--;
+    }
+
     if (player > 21) {
       player = 'BUST!';
       _playing = false;
