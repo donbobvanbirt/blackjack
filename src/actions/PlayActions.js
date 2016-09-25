@@ -28,6 +28,12 @@ const PlayActions = {
     })
   },
 
+  endPlayerTurn() {
+    AppDispatcher.dispatch({
+      type: 'END_PLAYER_TURN'
+    })
+  },
+
   calculateWinner() {
     AppDispatcher.dispatch({
       type: 'CALCULATE_WINNER'

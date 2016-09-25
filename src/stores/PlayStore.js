@@ -82,7 +82,8 @@ class PlayStore extends EventEmitter {
           _playerHand = [];
           _winner = '';
           _dealerHand.push(_deck.pop());
-          _dealerHand.push(_deck.pop());
+          _dealerHand.push({value: 0, image: '🂠'});
+          // _dealerHand.push(_deck.pop());
           _playerHand.push(_deck.pop());
           _playerHand.push(_deck.pop());
           this.calculateScore();
@@ -98,6 +99,11 @@ class PlayStore extends EventEmitter {
         break;
         case 'PLAYING':
           _playing = action.payload.val;
+          this.emit('CHANGE');
+        break;
+        case 'END_PLAYER_TURN':
+          _playing = false;
+          _dealerHand.pop();
           this.emit('CHANGE');
         break;
         case 'DEALER_HIT':

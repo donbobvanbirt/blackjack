@@ -53,10 +53,6 @@ export default class Game extends Component {
   newGame() {
     PlayActions.newGame();
     PlayActions.playing(true);
-    // this.setState({
-    //   playing: true
-    // })
-
   }
 
   hit() {
@@ -72,7 +68,7 @@ export default class Game extends Component {
   }
 
   endRound() {
-    PlayActions.playing(false);
+    PlayActions.endPlayerTurn();
     this.dealersTurn();
   }
 
@@ -81,12 +77,12 @@ export default class Game extends Component {
 
     return (
       <div>
-        <Winner winner={winner} />
-        <button className="btn btn-primary" onClick={this.newGame} disabled={playing}>New Game</button>
         <DealerHand hand={dealerHand} score={dealerScore} />
         <PlayerHand hand={playerHand} score={playerScore} />
+        <button className="btn btn-primary" onClick={this.newGame} disabled={playing}>New Hand</button>
         <button id="hitButton" className="btn btn-success" disabled={!playing} onClick={this.hit}>Hit</button>
         <button id="stayButton" className="btn btn-default" disabled={!playing} onClick={this.endRound}>Stay</button>
+        <Winner winner={winner} />
       </div>
 
     )
