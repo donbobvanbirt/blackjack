@@ -121,22 +121,27 @@ class PlayStore extends EventEmitter {
     var dealer = 0;
     var player = 0;
 
-    var aces = 0;
+    var aces1 = 0;
     _dealerHand.forEach(card => {
       dealer += card.value;
+      if (card.value === 11) {
+        aces1++;
+      }
     })
-    //
-    // while (aces && dealer > 21) {
-    //   dealer -= 10;
-    //   aces--;
-    // }
+
+    while (aces1 && dealer > 21) {
+      dealer -= 10;
+      aces1--;
+    }
 
     if (dealer > 21) {
       dealer = 'BUST!';
     }
     _dealerScore = dealer;
 
+// _____________________________________
 
+    var aces = 0;
     _playerHand.forEach(card => {
       player += card.value;
       if (card.value === 11) {
