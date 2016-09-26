@@ -25,7 +25,7 @@ export default class StartGame extends Component {
     const { chips, playing, bet } = this.props;
     return (
       <div>
-        <h5>Pot: {numeral(bet).format('$0,0.00')}</h5>
+        <h5>Bet: {numeral(bet).format('$0,0.00')}</h5>
         <h5>Chips in hand: {numeral(chips).format('$0,0.00')}</h5>
         <form onSubmit={this._submitForm}>
           <input ref="betAmount" type="number" min='1' step='1' required/>

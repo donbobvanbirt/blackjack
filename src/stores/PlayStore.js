@@ -1,9 +1,7 @@
 import AppDispatcher from '../AppDispatcher';
 import { EventEmitter } from 'events';
 import lodash from 'lodash';
-// import cards from 'cards';
 
-// let _deck = new cards.PokerDeck();
 let startingDeck = [
   {name: 'Ace of Spades', value: 11, image: '🂡'},
   {name: 'Duece of Spades', value: 2, image: '🂢'},
@@ -87,7 +85,6 @@ class PlayStore extends EventEmitter {
           _winner = '';
           _dealerHand.push(_deck.pop());
           _dealerHand.push({value: 0, image: '🂠'});
-          // _dealerHand.push(_deck.pop());
           _playerHand.push(_deck.pop());
           _playerHand.push(_deck.pop());
           this.calculateScore();
@@ -97,12 +94,13 @@ class PlayStore extends EventEmitter {
             _chips += _bet * 2.5;
             _bet = 0;
           }
+          console.log('chips:', _chips);
           this.emit('CHANGE');
         break;
         case 'DRAW_CARD':
           // console.log('card drawn');
           _playerHand.push(_deck.pop());
-          this.calculateScore(_playerScore);
+          this.calculateScore();
           // console.log('dealerScore:', _dealerScore, 'playerScore', _playerScore);
           this.emit('CHANGE');
         break;
@@ -117,7 +115,7 @@ class PlayStore extends EventEmitter {
         break;
         case 'DEALER_HIT':
           _dealerHand.push(_deck.pop());
-          this.calculateScore(_dealerScore);
+          this.calculateScore();
           // console.log('the house is hitting');
           this.emit('CHANGE');
         break;
@@ -127,6 +125,8 @@ class PlayStore extends EventEmitter {
           this.emit('CHANGE');
         break;
         case 'DOUBLE_DOWN':
+          // _doubleDown = true;
+          _chips -= _bet;
           _bet = _bet * 2;
           this.emit('CHANGE');
         break;
@@ -134,7 +134,7 @@ class PlayStore extends EventEmitter {
     });
   }
 
-  calculateScore(score) {
+  calculateScore() {
     var dealer = 0;
     var player = 0;
 
@@ -237,18 +237,6 @@ class PlayStore extends EventEmitter {
   getBet() {
     return _bet;
   }
-
-  // getAll() {
-  //   let all = {
-  //     deck: _deck,
-  //     dealerHand: _dealerHand,
-  //     playerHand: _playerHand,
-  //     dealerScore: _dealerScore,
-  //     playerScore: _playerScore
-  //   }
-  //   return all;
-  // }
-
 }
 
 export default new PlayStore();
