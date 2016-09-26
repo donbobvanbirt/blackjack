@@ -180,7 +180,7 @@ class PlayStore extends EventEmitter {
   }
 
   calculateWinner() {
-    if (_dealerScore > _playerScore) {
+    if (_dealerScore > _playerScore || _playerScore === "BUST!") {
       _winner = "HOUSE WINS!";
       _bet = 0;
     } else if (_dealerScore === _playerScore) {

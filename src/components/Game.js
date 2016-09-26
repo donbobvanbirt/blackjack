@@ -85,7 +85,9 @@ export default class Game extends Component {
   doubleDown() {
     PlayActions.doubleDown();
     this.hit();
-    this.endRound();
+    // if (!this.state.winner) {
+      this.endRound();
+    // }
   }
 
   render() {
