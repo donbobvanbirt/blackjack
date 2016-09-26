@@ -5,6 +5,8 @@ import PlayActions from '../actions/PlayActions';
 import PlayerHand from './PlayerHand';
 import DealerHand from './DealerHand';
 import Winner from './Winner';
+import Chips from './Chips';
+import StartGame from './StartGame';
 
 export default class Game extends Component {
   constructor(props) {
@@ -17,10 +19,11 @@ export default class Game extends Component {
       dealerHand: PlayStore.getDealerHand(),
       dealerScore: PlayStore.getDealerScore(),
       playerScore: PlayStore.getPlayerScore(),
-      playing:  PlayStore.getPlaying()
+      playing:  PlayStore.getPlaying(),
+      chips: PlayStore.getChips()
     }
     this._onChange = this._onChange.bind(this);
-    this.newGame = this.newGame.bind(this);
+    // this.newGame = this.newGame.bind(this);
     this.endRound = this.endRound.bind(this);
     this.hit = this.hit.bind(this);
     // console.log('state:', this.state);
@@ -45,15 +48,16 @@ export default class Game extends Component {
       dealerScore: PlayStore.getDealerScore(),
       playerScore: PlayStore.getPlayerScore(),
       playing:  PlayStore.getPlaying(),
-      winner: PlayStore.getWinner()
+      winner: PlayStore.getWinner(),
+      chips: PlayStore.getChips()
     })
     // console.log('state:', this.state);
   }
 
-  newGame() {
-    PlayActions.newGame();
-    PlayActions.playing(true);
-  }
+  // newGame() {
+  //   PlayActions.newGame();
+  //   PlayActions.playing(true);
+  // }
 
   hit() {
     PlayActions.drawCard();
@@ -73,13 +77,15 @@ export default class Game extends Component {
   }
 
   render() {
-    const { playerHand, dealerHand, playerScore, dealerScore, playing, winner } = this.state;
+    const { playerHand, dealerHand, playerScore, dealerScore, playing, winner, chips } = this.state;
 
     return (
       <div>
         <DealerHand hand={dealerHand} score={dealerScore} />
         <PlayerHand hand={playerHand} score={playerScore} />
-        <button className="btn btn-primary" onClick={this.newGame} disabled={playing}>New Hand</button>
+        {/* <Chips chips={chips}/> */}
+        {/* <button className="btn btn-primary" onClick={this.newGame} disabled={playing}>New Hand</button> */}
+        <StartGame chips={chips} newGame={this.newGame} playing={playing}/>
         <button id="hitButton" className="btn btn-success" disabled={!playing} onClick={this.hit}>Hit</button>
         <button id="stayButton" className="btn btn-default" disabled={!playing} onClick={this.endRound}>Stay</button>
         <Winner winner={winner} />

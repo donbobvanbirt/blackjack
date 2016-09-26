@@ -69,6 +69,8 @@ let _dealerScore = 0;
 let _playerScore = 0;
 let _playing = false;
 let _winner = '';
+let _chips = 100;
+let _bet = 0;
 
 class PlayStore extends EventEmitter {
   constructor() {
@@ -80,6 +82,8 @@ class PlayStore extends EventEmitter {
           _deck = lodash.shuffle(startingDeck);
           _dealerHand = [];
           _playerHand = [];
+          _bet = action.payload.bet;
+          _chips -= _bet;
           _winner = '';
           _dealerHand.push(_deck.pop());
           _dealerHand.push({value: 0, image: '🂠'});
@@ -87,7 +91,12 @@ class PlayStore extends EventEmitter {
           _playerHand.push(_deck.pop());
           _playerHand.push(_deck.pop());
           this.calculateScore();
-          // console.log('dealerScore:', _dealerScore, 'playerScore', _playerScore);
+          if (_playerScore === 21) {
+            _playing = false;
+            _winner = "BLACKJACK!!!"
+            _chips += _bet * 2.5;
+            _bet = 0;
+          }
           this.emit('CHANGE');
         break;
         case 'DRAW_CARD':
@@ -171,10 +180,14 @@ class PlayStore extends EventEmitter {
   calculateWinner() {
     if (_dealerScore > _playerScore) {
       _winner = "HOUSE WINS!";
+      _bet = 0;
     } else if (_dealerScore === _playerScore) {
       _winner = "PUSH";
+      _chips += _bet * 1;
+      _bet = 0;
     } else {
       _winner = "YOU WON!!";
+      _chips += _bet * 2;
     }
   }
 
@@ -212,6 +225,10 @@ class PlayStore extends EventEmitter {
 
   getWinner() {
     return _winner
+  }
+
+  getChips() {
+    return _chips;
   }
 
   // getAll() {

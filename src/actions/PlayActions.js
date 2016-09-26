@@ -1,11 +1,13 @@
 import AppDispatcher from '../AppDispatcher';
 
 const PlayActions = {
-  newGame() {
+  newGame(bet) {
     // console.log('play button clicked!');
     AppDispatcher.dispatch({
-      type: 'NEW_GAME'
+      type: 'NEW_GAME',
+      payload: { bet }
     })
+    console.log('bet', bet)
   },
 
   drawCard() {
@@ -38,7 +40,9 @@ const PlayActions = {
     AppDispatcher.dispatch({
       type: 'CALCULATE_WINNER'
     })
-  }
+  },
+
+
 }
 
 export default PlayActions;
