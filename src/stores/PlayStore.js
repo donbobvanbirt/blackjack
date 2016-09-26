@@ -83,10 +83,10 @@ class PlayStore extends EventEmitter {
           _bet = action.payload.bet;
           _chips -= _bet;
           _winner = '';
+          _playerHand.push(_deck.pop());
           _dealerHand.push(_deck.pop());
+          _playerHand.push(_deck.pop());
           _dealerHand.push({value: 0, image: '🂠'});
-          _playerHand.push(_deck.pop());
-          _playerHand.push(_deck.pop());
           this.calculateScore();
           if (_playerScore === 21) {
             _playing = false;
@@ -94,14 +94,12 @@ class PlayStore extends EventEmitter {
             _chips += _bet * 2.5;
             _bet = 0;
           }
-          console.log('chips:', _chips);
+          // console.log('chips:', _chips);
           this.emit('CHANGE');
         break;
         case 'DRAW_CARD':
-          // console.log('card drawn');
           _playerHand.push(_deck.pop());
           this.calculateScore();
-          // console.log('dealerScore:', _dealerScore, 'playerScore', _playerScore);
           this.emit('CHANGE');
         break;
         case 'PLAYING':
@@ -116,16 +114,13 @@ class PlayStore extends EventEmitter {
         case 'DEALER_HIT':
           _dealerHand.push(_deck.pop());
           this.calculateScore();
-          // console.log('the house is hitting');
           this.emit('CHANGE');
         break;
         case 'CALCULATE_WINNER':
           this.calculateWinner();
-          console.log(_winner);
           this.emit('CHANGE');
         break;
         case 'DOUBLE_DOWN':
-          // _doubleDown = true;
           _chips -= _bet;
           _bet = _bet * 2;
           this.emit('CHANGE');
@@ -155,8 +150,6 @@ class PlayStore extends EventEmitter {
       dealer = 'BUST!';
     }
     _dealerScore = dealer;
-
-// _____________________________________
 
     var aces = 0;
     _playerHand.forEach(card => {

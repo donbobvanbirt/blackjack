@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 
-import Layout from './components/Layout';   // component that describes the layout
+import Layout from './components/Layout';
 
 render(
   <Layout />,
