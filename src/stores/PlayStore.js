@@ -69,7 +69,7 @@ let _dealerScore = 0;
 let _playerScore = 0;
 let _playing = false;
 let _winner = '';
-let _chips = 100;
+let _chips = 1000;
 let _bet = 0;
 
 class PlayStore extends EventEmitter {
@@ -188,6 +188,7 @@ class PlayStore extends EventEmitter {
     } else {
       _winner = "YOU WON!!";
       _chips += _bet * 2;
+      _bet = 0;
     }
   }
 
@@ -229,6 +230,10 @@ class PlayStore extends EventEmitter {
 
   getChips() {
     return _chips;
+  }
+
+  getBet() {
+    return _bet;
   }
 
   // getAll() {

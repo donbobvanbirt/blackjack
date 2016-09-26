@@ -5,7 +5,7 @@ import PlayActions from '../actions/PlayActions';
 import PlayerHand from './PlayerHand';
 import DealerHand from './DealerHand';
 import Winner from './Winner';
-import Chips from './Chips';
+// import Chips from './Chips';
 import StartGame from './StartGame';
 
 export default class Game extends Component {
@@ -20,7 +20,8 @@ export default class Game extends Component {
       dealerScore: PlayStore.getDealerScore(),
       playerScore: PlayStore.getPlayerScore(),
       playing:  PlayStore.getPlaying(),
-      chips: PlayStore.getChips()
+      chips: PlayStore.getChips(),
+      bet: PlayStore.getBet()
     }
     this._onChange = this._onChange.bind(this);
     // this.newGame = this.newGame.bind(this);
@@ -49,7 +50,8 @@ export default class Game extends Component {
       playerScore: PlayStore.getPlayerScore(),
       playing:  PlayStore.getPlaying(),
       winner: PlayStore.getWinner(),
-      chips: PlayStore.getChips()
+      chips: PlayStore.getChips(),
+      bet: PlayStore.getBet()
     })
     // console.log('state:', this.state);
   }
@@ -77,7 +79,7 @@ export default class Game extends Component {
   }
 
   render() {
-    const { playerHand, dealerHand, playerScore, dealerScore, playing, winner, chips } = this.state;
+    const { playerHand, dealerHand, playerScore, dealerScore, playing, winner, chips, bet } = this.state;
 
     return (
       <div>
@@ -85,7 +87,7 @@ export default class Game extends Component {
         <PlayerHand hand={playerHand} score={playerScore} />
         {/* <Chips chips={chips}/> */}
         {/* <button className="btn btn-primary" onClick={this.newGame} disabled={playing}>New Hand</button> */}
-        <StartGame chips={chips} newGame={this.newGame} playing={playing}/>
+        <StartGame chips={chips} newGame={this.newGame} playing={playing} bet={bet}/>
         <button id="hitButton" className="btn btn-success" disabled={!playing} onClick={this.hit}>Hit</button>
         <button id="stayButton" className="btn btn-default" disabled={!playing} onClick={this.endRound}>Stay</button>
         <Winner winner={winner} />

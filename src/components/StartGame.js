@@ -16,19 +16,22 @@ export default class StartGame extends Component {
     if (betAmount.value > this.props.chips) {
       alert("You do not have enough money for that!");
     } else {
-      PlayActions.newGame(betAmount.value);
       PlayActions.playing(true);
+      PlayActions.newGame(betAmount.value);
     }
   }
 
   render() {
-    const { chips, playing } = this.props;
+    const { chips, playing, bet } = this.props;
     return (
       <div>
-        {numeral(chips).format('$0,0.00')}
+        <h5>Pot: {numeral(bet).format('$0,0.00')}</h5>
+        <h5>Chips in hand: {numeral(chips).format('$0,0.00')}</h5>
         <form onSubmit={this._submitForm}>
           <input ref="betAmount" type="number" min='1' step='1' required/>
+          <br/>
           <button className="btn btn-primary" disabled={playing}>Place Bet</button>
+          <hr width="60%"/>
         </form>
       </div>
     )
