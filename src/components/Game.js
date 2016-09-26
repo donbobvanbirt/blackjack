@@ -27,6 +27,10 @@ export default class Game extends Component {
     // this.newGame = this.newGame.bind(this);
     this.endRound = this.endRound.bind(this);
     this.hit = this.hit.bind(this);
+    this.doubleDown = this.doubleDown.bind(this);
+
+    // this.endRound() = this.endRound().bind(this);
+    // this.hit() = this.hit().bind(this);
     // console.log('state:', this.state);
   }
 
@@ -78,6 +82,12 @@ export default class Game extends Component {
     this.dealersTurn();
   }
 
+  doubleDown() {
+    PlayActions.doubleDown();
+    this.hit();
+    this.endRound();
+  }
+
   render() {
     const { playerHand, dealerHand, playerScore, dealerScore, playing, winner, chips, bet } = this.state;
 
@@ -90,6 +100,7 @@ export default class Game extends Component {
         <StartGame chips={chips} newGame={this.newGame} playing={playing} bet={bet}/>
         <button id="hitButton" className="btn btn-success" disabled={!playing} onClick={this.hit}>Hit</button>
         <button id="stayButton" className="btn btn-default" disabled={!playing} onClick={this.endRound}>Stay</button>
+        <button id="dubbleDownButton" className="btn btn-warning" disabled={!playing} onClick={this.doubleDown}>Dubble Down</button>
         <Winner winner={winner} />
       </div>
 

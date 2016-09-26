@@ -1,7 +1,7 @@
 import AppDispatcher from '../AppDispatcher';
 import { EventEmitter } from 'events';
 import lodash from 'lodash';
-import cards from 'cards';
+// import cards from 'cards';
 
 // let _deck = new cards.PokerDeck();
 let startingDeck = [
@@ -122,10 +122,12 @@ class PlayStore extends EventEmitter {
           this.emit('CHANGE');
         break;
         case 'CALCULATE_WINNER':
-
-          // console.log('calculating winner');
           this.calculateWinner();
           console.log(_winner);
+          this.emit('CHANGE');
+        break;
+        case 'DOUBLE_DOWN':
+          _bet = _bet * 2;
           this.emit('CHANGE');
         break;
       }

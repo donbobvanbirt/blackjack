@@ -42,6 +42,11 @@ const PlayActions = {
     })
   },
 
+  doubleDown() {
+    AppDispatcher.dispatch({
+      type: 'DOUBLE_DOWN'
+    })
+  }
 
 }
 
